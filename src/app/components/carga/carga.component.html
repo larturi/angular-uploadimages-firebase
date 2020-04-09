@@ -7,12 +7,12 @@
     <div appNgDropFiles
          [archivos]="archivos"
          (mouseSobre)="estaSobreElementoDrop=$event"
+         (click)="estaSobreElementoDrop=$event"
          [ngClass]="{'file-over': estaSobreElementoDrop }"
          class="well drop-zone file-over mb-3">
       <h4>Arrastre aqui los archivos</h4>
       <img src="assets/drop-images.png" alt="">
     </div>
-
 
    </div>
 

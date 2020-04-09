@@ -14,6 +14,8 @@ import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFirestore } from 'angularfire2/firestore';
+
+// Directivas Personalizadas
 import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
 
 @NgModule({
