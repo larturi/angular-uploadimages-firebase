@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, ElementRef, HostListener, Input, Output, ViewEncapsulation } from '@angular/core';
 import { FileItem } from '../models/file-items.model';
+import { ValidacionesService } from '../services/validaciones.service';
 
 @Directive({
   selector: '[appNgDropFiles]'
@@ -9,12 +10,12 @@ export class NgDropFilesDirective {
   @Output() mouseSobre: EventEmitter<boolean> = new EventEmitter();
   @Input() archivos: FileItem[] = [];
 
-  constructor() { }
+  constructor(public vs: ValidacionesService) { }
 
   @HostListener('dragover', ['$event'])
   public onDragEnter(event: any) {
     this.mouseSobre.emit(true);
-    this._prevenirBrowserAbraImagen(event);
+    this.vs._prevenirBrowserAbraImagen(event);
   }
 
   @HostListener('dragleave', ['$event'])
@@ -33,7 +34,7 @@ export class NgDropFilesDirective {
 
     this.extraerArchivos(transferencia.files);
 
-    this._prevenirBrowserAbraImagen(event);
+    this.vs._prevenirBrowserAbraImagen(event);
 
     this.mouseSobre.emit(false);
 
@@ -49,7 +50,7 @@ export class NgDropFilesDirective {
     for (const propiedad in Object.getOwnPropertyNames(archivosLista)) {
       const archivoTemporal = archivosLista[propiedad];
 
-      if (this._archivoPuedeSerCargado(archivoTemporal)) {
+      if (this.vs._archivoPuedeSerCargado(archivoTemporal, this.archivos)) {
         const nuevoArchivo = new FileItem(archivoTemporal);
         this.archivos.push(nuevoArchivo);
       }
@@ -57,37 +58,5 @@ export class NgDropFilesDirective {
 
     console.log(this.archivos);
   }
-
-  // Validaciones
-
-  private _archivoPuedeSerCargado(archivo: File): boolean {
-     if (!this._archivoYaFueDropeado(archivo.name) && this._esImagen(archivo.type)) {
-        return true;
-     } else {
-       return false;
-     }
-  }
-
-  private _prevenirBrowserAbraImagen(event) {
-      event.preventDefault();
-      event.stopPropagation();
-  }
-
-  private _archivoYaFueDropeado(nombreArchivo: string): boolean {
-    for (const archivo of this.archivos) {
-      if (archivo.nombreArchivo === nombreArchivo) {
-        console.log('El archivo ' + archivo.nombreArchivo + ' ya esta agregado');
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private _esImagen(tipoArchivo: string): boolean {
-    return (tipoArchivo === '' || tipoArchivo === undefined) ? false : tipoArchivo.startsWith('image');
-  }
-
-
 
 }

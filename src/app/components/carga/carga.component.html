@@ -2,7 +2,7 @@
 
    <div class="col-md-4">
 
-    <h4 class="mb-4">Seleccione archivos</h4>
+    <h4 class="mb-4">Seleccionar archivos</h4>
 
     <div appNgDropFiles
          [archivos]="archivos"
@@ -10,14 +10,20 @@
          (click)="estaSobreElementoDrop=$event"
          [ngClass]="{'file-over': estaSobreElementoDrop }"
          class="well drop-zone file-over mb-3">
-      <h4>Arrastre aqui los archivos</h4>
+      <h6>Arrastrar aqui los archivos</h6>
       <img src="assets/drop-images.png" alt="">
     </div>
 
+    <div class="custom-file">
+      <input type="file"
+             class="custom-file-input"
+             id="customFile"
+             (change)="onInputChange($event)"
+             multiple>
+      <label class="custom-file-label" for="customFile">Seleccionar</label>
+    </div>
 
-    <input type="file"
-           (change)="onInputChange($event)"
-           multiple/>
+    <br><br>
 
    </div>
 

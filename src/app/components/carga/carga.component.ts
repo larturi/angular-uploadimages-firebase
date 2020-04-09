@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileItem } from '../../models/file-items.model';
 import { CargaImaginesService } from '../../services/carga-imagines.service';
-import { Form } from '@angular/forms';
+import { ValidacionesService } from '../../services/validaciones.service';
 
 @Component({
   selector: 'app-carga',
@@ -14,7 +14,8 @@ export class CargaComponent implements OnInit {
   estaSobreElementoDrop = false;
 
   // tslint:disable-next-line: variable-name
-  constructor(public _cargaImagenes: CargaImaginesService) {}
+  constructor(public _cargaImagenes: CargaImaginesService,
+              public vs: ValidacionesService) {}
 
   ngOnInit(): void {
   }
@@ -36,8 +37,11 @@ export class CargaComponent implements OnInit {
     // tslint:disable-next-line: forin
     for (const propiedad in Object.getOwnPropertyNames(archivosSeleccionados)) {
       const archivoTemporal = archivosSeleccionados[propiedad];
-      const nuevoArchivo = new FileItem(archivoTemporal);
-      this.archivos.push(nuevoArchivo);
+
+      if (this.vs._archivoPuedeSerCargado(archivoTemporal, this.archivos)) {
+         const nuevoArchivo = new FileItem(archivoTemporal);
+         this.archivos.push(nuevoArchivo);
+      }
     }
 
     console.log(this.archivos);
